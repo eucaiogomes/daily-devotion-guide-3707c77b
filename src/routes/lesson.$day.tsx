@@ -688,45 +688,101 @@ function IntroStep({ psalm }: { psalm: PsalmLesson }) {
   const { speak } = useSpeech();
   const v1 = psalm.verses[0];
   return (
-    <div className="text-center pt-2">
-      <div className="mx-auto size-16 rounded-full bg-gradient-hero flex items-center justify-center shadow-soft text-3xl">
-        {psalm.emoji}
-      </div>
-      <p className="mt-4 text-xs uppercase tracking-widest font-semibold text-muted-foreground">
-        Salmo de hoje
-      </p>
-      <h1 className="font-display text-3xl font-bold mt-1">{psalm.title}</h1>
-      <p className="mt-1 text-sm text-muted-foreground italic">{psalm.subtitle}</p>
+    <div className="pt-2">
+      {/* Capa grande tipo álbum — gradiente + emoji do salmo + brilho */}
+      <div className="mx-auto max-w-[20rem]">
+        <div className="relative aspect-square rounded-3xl bg-gradient-hero shadow-soft overflow-hidden">
+          {/* glows decorativos */}
+          <div className="absolute -top-8 -left-8 size-40 rounded-full bg-primary-foreground/20 blur-2xl" />
+          <div className="absolute -bottom-10 -right-6 size-44 rounded-full bg-gold/40 blur-3xl" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-[7rem] leading-none drop-shadow-2xl select-none">
+              {psalm.emoji}
+            </span>
+          </div>
+          {/* Selo "Salmo" no canto */}
+          <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-primary">
+            <Sparkles className="size-3 text-gold" />
+            Salmo
+          </div>
+        </div>
 
-      <div className="mt-6 rounded-3xl bg-card border border-border/60 p-6 text-left shadow-soft">
+        {/* Título estilo álbum */}
+        <div className="mt-5 text-left px-1">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+            Devocional do dia
+          </p>
+          <h1 className="font-display text-2xl font-bold leading-tight mt-1">
+            {psalm.title}
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground italic">
+            {psalm.subtitle}
+          </p>
+        </div>
+
+        {/* Linha "tocando agora" — visual de player, sem controles */}
         <button
           onClick={() => speak(v1.en)}
-          className="size-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3"
+          className="mt-5 w-full flex items-center gap-3 rounded-2xl bg-card border border-border/60 p-3 text-left shadow-sm active:translate-y-0.5 transition"
           aria-label="Ouvir versículo"
         >
-          <Volume2 className="size-5" />
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-hero text-primary-foreground shadow-soft">
+            <Volume2 className="size-5" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+              {v1.ref}
+            </p>
+            <p className="font-display text-sm font-bold text-foreground truncate">
+              "{v1.en}"
+            </p>
+            <p className="text-[11px] text-muted-foreground italic truncate mt-0.5">
+              {v1.pt}
+            </p>
+          </div>
+          {/* Onda de áudio decorativa */}
+          <div className="hidden xs:flex items-center gap-0.5 h-6 shrink-0">
+            {[40, 75, 55, 90, 60, 35, 70].map((h, i) => (
+              <span
+                key={i}
+                className="w-0.5 rounded-full bg-primary/40"
+                style={{ height: `${h}%` }}
+              />
+            ))}
+          </div>
         </button>
-        <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground">
-          {v1.ref}
-        </p>
-        <p className="font-display text-xl mt-1 leading-snug">"{v1.en}"</p>
-        <p className="text-sm text-muted-foreground mt-2 italic">{v1.pt}</p>
-      </div>
 
-      <div className="mt-6">
-        <p className="text-xs text-muted-foreground mb-3">
-          Palavras que vais guardar hoje
-        </p>
-        <div className="flex flex-wrap gap-2 justify-center">
-          {psalm.keywords.slice(0, 5).map((k) => (
-            <button
-              key={k.en}
-              onClick={() => speak(k.en)}
-              className="px-3 py-1.5 rounded-full bg-gold/15 text-foreground text-xs font-semibold inline-flex items-center gap-1.5 active:scale-95"
-            >
-              <Volume2 className="size-3" /> {k.en}
-            </button>
-          ))}
+        {/* "Faixas" / palavras como playlist */}
+        <div className="mt-6 px-1">
+          <div className="flex items-end justify-between mb-2">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+              Palavras desta faixa
+            </p>
+            <span className="text-[10px] font-bold text-muted-foreground">
+              {psalm.keywords.slice(0, 5).length}
+            </span>
+          </div>
+          <ul className="space-y-1.5">
+            {psalm.keywords.slice(0, 5).map((k, i) => (
+              <li key={k.en}>
+                <button
+                  onClick={() => speak(k.en)}
+                  className="w-full flex items-center gap-3 rounded-xl px-2 py-1.5 hover:bg-muted active:scale-[0.99] transition text-left"
+                >
+                  <span className="w-5 text-center text-[11px] font-bold text-muted-foreground tabular-nums">
+                    {i + 1}
+                  </span>
+                  <span className="flex-1 text-sm font-bold text-foreground truncate">
+                    {k.en}
+                  </span>
+                  <span className="text-[11px] text-muted-foreground italic truncate max-w-[40%]">
+                    {k.pt}
+                  </span>
+                  <Volume2 className="size-3.5 text-primary shrink-0" />
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
