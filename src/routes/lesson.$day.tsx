@@ -297,7 +297,12 @@ function LessonPage() {
 
   const [feedback, setFeedbackRaw] = useState<"idle" | "right" | "wrong">("idle");
   const { play } = useFeedbackSound();
-  const [soundOn, setSoundOn] = useState(() => isSoundEnabled());
+  // Inicia true em SSR e client para evitar mismatch; sincroniza com a
+  // preferência salva após hidratação.
+  const [soundOn, setSoundOn] = useState(true);
+  useEffect(() => {
+    setSoundOn(isSoundEnabled());
+  }, []);
 
   // Wrapper que toca som quando o estado de feedback muda para right/wrong.
   const setFeedback = (f: "idle" | "right" | "wrong") => {
