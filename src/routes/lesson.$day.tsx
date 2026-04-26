@@ -688,42 +688,37 @@ function IntroStep({ psalm }: { psalm: PsalmLesson }) {
   const { speak } = useSpeech();
   const v1 = psalm.verses[0];
   return (
-    <div className="pt-2">
-      {/* Capa grande tipo álbum — gradiente + emoji do salmo + brilho */}
+    <div className="pt-1">
       <div className="mx-auto max-w-[20rem]">
-        <div className="relative aspect-square rounded-3xl bg-gradient-hero shadow-soft overflow-hidden">
-          {/* glows decorativos */}
-          <div className="absolute -top-8 -left-8 size-40 rounded-full bg-primary-foreground/20 blur-2xl" />
-          <div className="absolute -bottom-10 -right-6 size-44 rounded-full bg-gold/40 blur-3xl" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-[7rem] leading-none drop-shadow-2xl select-none">
+        {/* Cabeçalho compacto: emoji + selo + título, sem capa quadrada */}
+        <div className="flex items-center gap-3">
+          <div className="relative flex size-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-hero shadow-soft">
+            <span className="text-3xl leading-none drop-shadow select-none">
               {psalm.emoji}
             </span>
           </div>
-          {/* Selo "Salmo" no canto */}
-          <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-primary">
-            <Sparkles className="size-3 text-gold" />
-            Salmo
+          <div className="min-w-0">
+            <span className="inline-flex items-center gap-1 rounded-full bg-card px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-widest text-primary border border-border/60">
+              <Sparkles className="size-3 text-gold" />
+              Salmo
+            </span>
+            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+              Devocional do dia
+            </p>
           </div>
         </div>
 
-        {/* Título estilo álbum */}
-        <div className="mt-5 text-left px-1">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-            Devocional do dia
-          </p>
-          <h1 className="font-display text-2xl font-bold leading-tight mt-1">
-            {psalm.title}
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground italic">
-            {psalm.subtitle}
-          </p>
-        </div>
+        <h1 className="font-display text-2xl font-bold leading-tight mt-3">
+          {psalm.title}
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground italic">
+          {psalm.subtitle}
+        </p>
 
         {/* Linha "tocando agora" — visual de player, sem controles */}
         <button
           onClick={() => speak(v1.en)}
-          className="mt-5 w-full flex items-center gap-3 rounded-2xl bg-card border border-border/60 p-3 text-left shadow-sm active:translate-y-0.5 transition"
+          className="mt-4 w-full flex items-center gap-3 rounded-2xl bg-card border border-border/60 p-3 text-left shadow-sm active:translate-y-0.5 transition"
           aria-label="Ouvir versículo"
         >
           <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-hero text-primary-foreground shadow-soft">
@@ -753,7 +748,7 @@ function IntroStep({ psalm }: { psalm: PsalmLesson }) {
         </button>
 
         {/* "Faixas" / palavras como playlist */}
-        <div className="mt-6 px-1">
+        <div className="mt-5 px-1">
           <div className="flex items-end justify-between mb-2">
             <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
               Palavras desta faixa
