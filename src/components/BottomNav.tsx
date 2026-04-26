@@ -13,9 +13,9 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Navegação principal"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur-md"
+      className="fixed inset-x-0 bottom-0 z-40 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2"
     >
-      <ul className="mx-auto flex max-w-md items-stretch justify-around px-2 py-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))]">
+      <ul className="mx-auto flex max-w-md items-center justify-around gap-1 rounded-full bg-card/95 backdrop-blur-xl px-2 py-2 shadow-soft border border-border/60">
         {ITEMS.map((item) => {
           const active = pathname === item.to;
           const Icon = item.icon;
@@ -23,11 +23,13 @@ export function BottomNav() {
             <li key={item.to} className="flex-1">
               <Link
                 to={item.to}
-                className={`flex flex-col items-center gap-0.5 rounded-xl py-2 text-[11px] font-extrabold uppercase tracking-wider transition ${
-                  active ? "text-primary" : "text-muted-foreground"
+                className={`flex items-center justify-center gap-1.5 rounded-full py-2.5 text-[11px] font-extrabold uppercase tracking-wider transition ${
+                  active
+                    ? "bg-gradient-hero text-primary-foreground shadow-soft"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Icon className={`size-5 ${active ? "stroke-[2.5]" : ""}`} />
+                <Icon className={`size-4 ${active ? "stroke-[2.5]" : ""}`} />
                 <span>{item.label}</span>
               </Link>
             </li>
