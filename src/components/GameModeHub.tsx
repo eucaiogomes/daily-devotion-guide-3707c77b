@@ -1,13 +1,24 @@
 import { Link } from "@tanstack/react-router";
-import { BookOpen, Music, Mic, HandHeart, Sparkles, Headphones, Zap, Trophy, Layers, Skull } from "lucide-react";
+import {
+  BookOpen,
+  Music,
+  Mic,
+  HandHeart,
+  Sparkles,
+  Headphones,
+  Zap,
+  Trophy,
+  Layers,
+  Skull,
+} from "lucide-react";
 
 type Mode = {
   id: string;
   title: string;
   subtitle: string;
   icon: React.ReactNode;
-  gradient: string;
-  shadow: string;
+  /** Tailwind classes for the icon bubble background + text color */
+  bubble: string;
   to: string;
   params?: Record<string, string>;
   badge?: string;
@@ -19,9 +30,8 @@ const MODES: Mode[] = [
     id: "anki",
     title: "Anki de Versículos",
     subtitle: "Memorize com repetição espaçada",
-    icon: <Layers className="size-7" />,
-    gradient: "bg-gradient-hero",
-    shadow: "shadow-chunky",
+    icon: <Layers className="size-6" />,
+    bubble: "bg-gradient-hero text-primary-foreground",
     to: "/anki",
     badge: "Novo",
     xp: 15,
@@ -30,9 +40,8 @@ const MODES: Mode[] = [
     id: "forca",
     title: "Forca dos Salmos",
     subtitle: "Adivinhe palavras em inglês",
-    icon: <Skull className="size-7" />,
-    gradient: "bg-gradient-flame",
-    shadow: "shadow-chunky",
+    icon: <Skull className="size-6" />,
+    bubble: "bg-gradient-flame text-white",
     to: "/forca",
     badge: "Novo",
     xp: 12,
@@ -41,9 +50,8 @@ const MODES: Mode[] = [
     id: "rush",
     title: "Match Rush",
     subtitle: "Vocabulário contra o tempo",
-    icon: <Zap className="size-7" />,
-    gradient: "bg-gradient-flame",
-    shadow: "shadow-chunky",
+    icon: <Zap className="size-6" />,
+    bubble: "bg-gradient-flame text-white",
     to: "/rush",
     badge: "Arcade",
     xp: 20,
@@ -52,9 +60,8 @@ const MODES: Mode[] = [
     id: "psalm",
     title: "Salmo do Dia",
     subtitle: "Lição completa da jornada",
-    icon: <BookOpen className="size-7" />,
-    gradient: "bg-gradient-hero",
-    shadow: "shadow-chunky",
+    icon: <BookOpen className="size-6" />,
+    bubble: "bg-gradient-hero text-primary-foreground",
     to: "/lesson/$day",
     params: { day: "1" },
     badge: "Principal",
@@ -64,9 +71,8 @@ const MODES: Mode[] = [
     id: "praise",
     title: "Karaokê de Louvor",
     subtitle: "Cante Amazing Grace",
-    icon: <Music className="size-7" />,
-    gradient: "bg-gradient-flame",
-    shadow: "shadow-chunky",
+    icon: <Music className="size-6" />,
+    bubble: "bg-gradient-flame text-white",
     to: "/devotional/$id",
     params: { id: "amazing-grace" },
     xp: 12,
@@ -75,9 +81,8 @@ const MODES: Mode[] = [
     id: "prayer",
     title: "Oração Guiada",
     subtitle: "Pai Nosso em inglês",
-    icon: <HandHeart className="size-7" />,
-    gradient: "bg-gradient-gold",
-    shadow: "shadow-chunky-gold",
+    icon: <HandHeart className="size-6" />,
+    bubble: "bg-gradient-gold text-white",
     to: "/devotional/$id",
     params: { id: "lords-prayer" },
     xp: 10,
@@ -86,9 +91,8 @@ const MODES: Mode[] = [
     id: "match",
     title: "Pareamento",
     subtitle: "Conecte EN ↔ PT",
-    icon: <Sparkles className="size-7" />,
-    gradient: "bg-success",
-    shadow: "shadow-chunky-success",
+    icon: <Sparkles className="size-6" />,
+    bubble: "bg-success text-success-foreground",
     to: "/lesson/$day",
     params: { day: "1" },
     xp: 8,
@@ -97,9 +101,8 @@ const MODES: Mode[] = [
     id: "speak",
     title: "Pronúncia",
     subtitle: "Repita versículos",
-    icon: <Mic className="size-7" />,
-    gradient: "bg-gradient-hero",
-    shadow: "shadow-chunky",
+    icon: <Mic className="size-6" />,
+    bubble: "bg-gradient-hero text-primary-foreground",
     to: "/lesson/$day",
     params: { day: "1" },
     xp: 8,
@@ -108,9 +111,8 @@ const MODES: Mode[] = [
     id: "listen",
     title: "Escuta Devocional",
     subtitle: "Ouça e entenda",
-    icon: <Headphones className="size-7" />,
-    gradient: "bg-accent",
-    shadow: "shadow-chunky",
+    icon: <Headphones className="size-6" />,
+    bubble: "bg-accent text-accent-foreground",
     to: "/lesson/$day",
     params: { day: "1" },
     xp: 8,
@@ -127,7 +129,7 @@ export function GameModeHub() {
           </p>
           <h2 className="font-display text-2xl font-bold">Jogue, ouça e ore</h2>
         </div>
-        <span className="inline-flex items-center gap-1 rounded-full bg-card px-2 py-1 text-xs font-extrabold text-gold shadow-sm border border-border">
+        <span className="inline-flex items-center gap-1 rounded-full bg-card px-2.5 py-1 text-xs font-extrabold text-gold shadow-sm border border-border/60">
           <Trophy className="size-3.5" /> 365
         </span>
       </div>
@@ -138,23 +140,25 @@ export function GameModeHub() {
             key={m.id}
             to={m.to}
             params={m.params as never}
-            className={`relative ${m.gradient} text-white rounded-2xl p-4 ${m.shadow} active:translate-y-1 active:shadow-none transition`}
+            className="relative bg-card rounded-3xl p-4 border border-border/60 shadow-sm active:translate-y-0.5 transition"
           >
             {m.badge && (
-              <span className="absolute -top-2 -right-2 bg-card text-[10px] font-extrabold px-2 py-0.5 rounded-full text-streak border border-border shadow">
+              <span className="absolute -top-1.5 right-3 bg-gradient-gold text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-soft">
                 {m.badge}
               </span>
             )}
             <div className="flex items-start justify-between gap-2">
-              <div className="size-11 rounded-xl bg-primary-foreground/20 flex items-center justify-center">
+              <div className={`size-12 rounded-2xl flex items-center justify-center shadow-soft ${m.bubble}`}>
                 {m.icon}
               </div>
-              <span className="rounded-full bg-primary-foreground/20 px-2 py-0.5 text-[10px] font-extrabold">+{m.xp} XP</span>
+              <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-extrabold text-muted-foreground">
+                +{m.xp} XP
+              </span>
             </div>
-            <p className="mt-3 font-display text-base font-bold leading-tight">
+            <p className="mt-3 font-display text-base font-bold leading-tight text-foreground">
               {m.title}
             </p>
-            <p className="text-[11px] opacity-90 font-semibold mt-0.5 leading-tight">
+            <p className="text-[11px] text-muted-foreground font-semibold mt-0.5 leading-tight">
               {m.subtitle}
             </p>
           </Link>
