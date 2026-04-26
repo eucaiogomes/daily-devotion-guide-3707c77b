@@ -165,6 +165,7 @@
   .bg-gradient-gold { background: var(--gradient-gold); }
   .bg-gradient-flame { background: var(--gradient-flame); }
   .bg-gradient-sky { background: var(--gradient-sky); }
+  .bg-gradient-card { background: var(--gradient-card); }
   .shadow-chunky { box-shadow: var(--shadow-chunky); }
   .shadow-chunky-success { box-shadow: var(--shadow-chunky-success); }
   .shadow-chunky-gold { box-shadow: var(--shadow-chunky-gold); }
